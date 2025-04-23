@@ -75,7 +75,6 @@ async function getActress(id: number): Promise<Actress | null> {
   }
 }
 
-
 async function getAllActress(): Promise<Actress[]> {
   try {
     const response = await fetch(
@@ -93,6 +92,21 @@ async function getAllActress(): Promise<Actress[]> {
   } catch (error) {
     if (error instanceof Error) {
       console.error("Errore durante il recupero delle attrici", error);
+    } else {
+      console.error("Errore sconosciuto", error);
+    }
+    return [];
+  }
+}
+
+async function getActresses(ids: number[]): Promise<(Actress | null)[]> {
+  try {
+    const promises = ids.map((id) => getActress(id)); // getActress deve restituire Promise<Actress | null>
+    const actresses = await Promise.all(promises);
+    return actresses;
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error("Errore:", error);
     } else {
       console.error("Errore sconosciuto", error);
     }
